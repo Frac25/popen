@@ -1,0 +1,15 @@
+write the following fonction :
+int ft_open(const char *file, char* const argv[], char type);
+
+The fonction must lunch the executable file with the argument argv (using execvp)
+If type is 'r' the fonction must return a file descriptor connected to the output of the command.
+If type is 'w' the fonction must return a file descriptor connected to the intput of the command.
+In case of error, or invalid parameter the fonction must return -1. For exemple, the fonction could be used like that :
+
+{
+    int fd = ft_open("ls", (char* const[]) {"ls", NULL}, 'r');
+    char*line;
+    while((line = get_next_line(fd)))
+        ft_putstr(line);
+}
+Hints : Do not leak file descriptor
