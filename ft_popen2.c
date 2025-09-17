@@ -3,7 +3,12 @@
 #include<stdlib.h>
 #include<aio.h>
 
-int ft_open(const char *file, char* const argv[], char type)
+char	*get_next_line(int fd);
+void	ft_putstr(char *s);
+
+
+
+int ft_popen(const char *file, char* const argv[], char type)
 {
 	int pip[2];
 	int pipt;
@@ -11,7 +16,7 @@ int ft_open(const char *file, char* const argv[], char type)
 
 	pipt = pipe(pip);
 	if(pipt < 0)
-		reurn(-1);
+		return(-1);
 	
 	pid = fork();
 	if(pid < 0)
@@ -37,25 +42,27 @@ int ft_open(const char *file, char* const argv[], char type)
 	}
 
 	if(type == 'r')
-		{
-			close(pip[1]);
-			return(pip[0]);
-		}
-		else if(type == 'w')
-		{
-			close(pip[0]);
-			return(pip[1]);
-		}
-		else
-			return(-1);
+	{
+		close(pip[1]);
+		return(pip[0]);
+	}
+	else if(type == 'w')
+	{
+		close(pip[0]);
+		return(pip[1]);
+	}
+	else
+		return(-1);
 }
 
 int main (void)
 {
 
-	int fd = ft_open("ls", (char* const[]) {"ls", NULL},'r');
+	int fd = ft_popen("ls", (char* const[]) {"ls", NULL},'r');
 	char*line;
 	while((line = get_next_line(fd)))
 		ft_putstr(line);
+
+	return(0);
 
 }

@@ -17,7 +17,7 @@ FILE* ft_popen(char* command, char* mode)
     }
 
     pid = fork();
-    if(pid < 0) // fork failed     
+    if(pid < 0) // fork failed
     {
         perror("fork");
         close(pip[0]);
@@ -50,9 +50,7 @@ FILE* ft_popen(char* command, char* mode)
         close(pip[0]);
         fp = fdopen(pip[1],"w" );
     }
-
     return (fp);
-
 }
 
 
