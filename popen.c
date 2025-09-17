@@ -10,6 +10,9 @@ FILE* ft_popen(char* command, char* mode)
     int pip[2];
     pid_t pid;
 
+	if(mode[0] != 'r' && mode[0] != 'w')
+		return (NULL);
+
     if(pipe(pip) == -1)
     {
         perror("pipe");
@@ -30,16 +33,21 @@ FILE* ft_popen(char* command, char* mode)
         if(mode[0] == 'r')
         {
             close(pip[0]);
-            dup2(pip[1], STDOUT_FILENO);
+			if(dup2(pip[1], STDOUT_FILENO) == -1)
+				exit(1);
+			close(pip[1]);
         }
         if(mode[0] == 'w')
         {
             close(pip[1]);
-            dup2(pip[0], STDIN_FILENO);
+			if(dup2(pip[0], STDIN_FILENO) == -1)
+				exit(1);
+			close(pip[0]);
         }
         execl("/bin/sh", "sh", "-c", command, (char *)NULL);
         exit(1);
     }
+
     if(mode[0] == 'r')
     {
         close(pip[1]);
@@ -50,7 +58,9 @@ FILE* ft_popen(char* command, char* mode)
         close(pip[0]);
         fp = fdopen(pip[1],"w" );
     }
+
     return (fp);
+
 }
 
 
